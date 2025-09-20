@@ -1,0 +1,15 @@
+# Ignore dependencies
+node_modules
+
+# Ignore environment & credentials
+.env
+serviceAccountKey.json
+
+# Optional logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
