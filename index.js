@@ -45,12 +45,12 @@ app.put("/approval-pb/:id", updateStatusPengajuanPB);
 app.get("/stats", getStatsHandler);
 
 // ==================== Jalankan server kalau bukan di Vercel ====================
-// if (process.env.VERCEL !== "1") {
-//   const PORT = process.env.PORT || 5000;
-//   app.listen(PORT, () => {
-//     console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
-//   });
-// }
+if (process.env.VERCEL !== "1") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+  });
+}
 
 // ✅ Export untuk Vercel (serverless)
 export default app;
