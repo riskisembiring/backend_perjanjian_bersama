@@ -1,16 +1,20 @@
 import admin from "firebase-admin";
-import serviceAccount from "../serviceAccountKey.json" assert { type: "json" };
+import "dotenv/config";
 
-// Inisialisasi Firebase Admin
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: "informasi-pb.appspot.com", // 🔑 ganti dengan bucket project kamu
-});
+const serviceAccount = {
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+};
 
-// Firestore
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: "informasi-pb.appspot.com",
+  });
+}
+
 const db = admin.firestore();
-
-// Storage bucket
 const bucket = admin.storage().bucket();
 
 export { db, bucket };
