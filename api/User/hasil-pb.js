@@ -39,10 +39,11 @@ const getHasilPbHandler = async (req, res) => {
         pemohon: pengajuan.namaPemohon,
         status:
           pengajuan.status === "Disetujui"
-            ? "Selesai"
+            ? "Diterima"
             : pengajuan.status === "Ditolak"
             ? "Ditolak"
             : "Proses",
+        alasan: pengajuan.alasan,
       };
     });
 

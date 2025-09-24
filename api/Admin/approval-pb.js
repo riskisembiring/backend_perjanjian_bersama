@@ -23,18 +23,15 @@ const getAllPengajuanPB = async (req, res) => {
           no: index + 1,
           nama: namaUser,
           tanggal: (() => {
-          const d = pengajuan.createdAt.toDate();
-          return (
-            `${String(d.getDate()).padStart(2, "0")}-${String(
-              d.getMonth() + 1
-            ).padStart(2, "0")}-${d.getFullYear()} ` +
-            `${String(d.getHours()).padStart(2, "0")}:${String(
-              d.getMinutes()
-            ).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`
-          );
-        })(),
+            const d = pengajuan.createdAt.toDate();
+            return (
+              `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()} ` +
+              `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`
+            );
+          })(),
           namaPemohon: pengajuan.namaPemohon,
           status: pengajuan.status,
+          alasan: pengajuan.alasan || "", // tampilkan alasan kalau ada
           files: pengajuan.files || {},
         };
       })
@@ -51,13 +48,19 @@ const getAllPengajuanPB = async (req, res) => {
 const updateStatusPengajuanPB = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, alasan } = req.body;
 
     if (!["Disetujui", "Ditolak", "Pending"].includes(status)) {
       return res.status(400).json({ message: "Status tidak valid!" });
     }
 
-    await db.collection("pengajuanPB").doc(id).update({ status });
+    const updateData = { status };
+
+    if (status === "Ditolak") {
+      updateData.alasan = alasan || "Tidak ada alasan diberikan";
+    }
+
+    await db.collection("pengajuanPB").doc(id).update(updateData);
 
     res.status(200).json({ message: `Status berhasil diubah menjadi ${status}` });
   } catch (error) {
