@@ -58,6 +58,8 @@ const updateStatusPengajuanPB = async (req, res) => {
 
     if (status === "Ditolak") {
       updateData.alasan = alasan || "Tidak ada alasan diberikan";
+    } else if (status === "Disetujui") {
+      updateData.alasan = ""; // kosongkan alasan kalau disetujui
     }
 
     await db.collection("pengajuanPB").doc(id).update(updateData);
